@@ -1,34 +1,34 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {useForm} from 'react-hook-form'
+import Card from './components/Card/Card'
 
+export interface iUser {
+  nome: string,
+  idade: number,
+  hobby: string
+}
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+  const {register, handleSubmit} = useForm<iUser>()
+  const [user, setUser] = useState<iUser>()
+  function submit(data: iUser){ 
+    setUser({
+      nome: data.nome,
+      idade: data.idade,
+      hobby: data.hobby
+    })
+    console.log(user)
+  }
+  return(
+    <form onSubmit={handleSubmit(submit)}>
+      <label htmlFor="">Nome</label>
+      <input type="text" placeholder="digite seu nome" {...register('nome')}/>
+      <label htmlFor="">Idade</label>
+      <input placeholder="digite sua idade" {...register('idade')}/>
+      <label htmlFor="">Hobby</label>
+      <input type="text" placeholder="digite seu hobby" {...register('hobby')}/>
+      <button type='submit'>Enviar</button>
+      {user ? <Card {...user}/> : ''}
+    </form>
   )
 }
 
